@@ -2,9 +2,7 @@ function initials() {
   var s = SpreadsheetApp.getActiveSpreadsheet();
   var initials = s.getSheetByName("Initials");
   var schedule = s.getSheetByName("Schedule ");
-  //var scheduleRange = schedule.getDataRange();
   var dates = schedule.getRange("1:1").getValues();
-  //Logger.log(dates);
   var today = Utilities.formatDate(new Date(), "GMT-5", "M/d/yyyy")
   var t = new Date(today);
   var col;
@@ -15,27 +13,36 @@ function initials() {
     }
   }
   checkers = schedule.getRange(20,col,16).getValues();
-  var ui = SpreadsheetApp.getUi(); // Same variations.
-  var dcs, checks;
-  Logger.log(checkers[0].length);
+  var ui = SpreadsheetApp.getUi();
   var shift = "";
-  for (var i = 0; i < checkers.length; i++){
-    if(!checkers[i][0]){
+  if(Array.isArray(checkers[0]) && checkers[0].length && checkers[0][0]){
+    shift = shift.concat("DCs:\n", checkers[0][0], " SL1");
+  }
+  if(Array.isArray(checkers[1]) && checkers[1].length && checkers[1][0]){
+    shift = shift.concat("\n", checkers[1][0], " SL2");
+  }
+  if(Array.isArray(checkers[2]) && checkers[2].length && checkers[2][0]){
+    shift = shift.concat("\n", checkers[2][0], " :m:");
+  }
+  for (var i = 3; i < 6; i++){
+    if(!(Array.isArray(checkers[i]) && checkers[i].length && checkers[i][0])){
       continue;
     }
-    if(i == 0){
-      shift = shift.concat("DCs:\n", checkers[i][0], " SL1");
-    }
-    else if(i == 1){
-      shift = shift.concat("\n", checkers[i][0], " SL2");
-    }
-    else if(i == 2){
-      shift = shift.concat("\n", checkers[i][0], " :m:");
-    }
-    else {
-      shift = shift.concat("\n", checkers[i][0]);
-    }
+    shift = shift.concat("\n", checkers[i][0]);
   }
-  var result = ui.alert(
-      shift);
-  } 
+  for (var i = 14; i < 16; i++){
+    if(!(Array.isArray(checkers[i]) && checkers[i].length && checkers[i][0])){
+      continue;
+    }
+    shift = shift.concat("\n", checkers[i][0], " :ctp-ghost:");
+  }
+  shift = shift.concat("\n\nCheckers:");
+  for (var i = 6; i < 14; i++){
+    if(!(Array.isArray(checkers[i]) && checkers[i].length && checkers[i][0])){
+      continue;
+    }
+    shift = shift.concat("\n", checkers[i][0]);
+  }
+  Logger.log(shift);
+  var result = ui.alert(shift);
+} 
