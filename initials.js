@@ -18,26 +18,24 @@ function initials() {
   var ui = SpreadsheetApp.getUi(); // Same variations.
   var dcs, checks;
   Logger.log(checkers[0].length);
+  var shift = "";
   for (var i = 0; i < checkers.length; i++){
     if(!checkers[i][0]){
       continue;
     }
     if(i == 0){
-      Logger.log("SL1");
+      shift = shift.concat("DCs:\n", checkers[i][0], " SL1");
     }
     else if(i == 1){
-      Logger.log("SL2");
+      shift = shift.concat("\n", checkers[i][0], " SL2");
     }
     else if(i == 2){
-      Logger.log("Mentor");
+      shift = shift.concat("\n", checkers[i][0], " :m:");
     }
     else {
-      Logger.log("Checker");
+      shift = shift.concat("\n", checkers[i][0]);
     }
   }
-  //var list = "DCs: \n" + checkers[0][0];
   var result = ui.alert(
-     'Please confirm',
-     'Are you sure you want to continue?',
-      ui.ButtonSet.YES_NO);
-  }
+      shift);
+  } 
