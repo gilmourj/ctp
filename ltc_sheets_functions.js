@@ -1,4 +1,10 @@
-// credit to https://webapps.stackexchange.com/questions/123706/making-select-columns-uppercase
+/*
+* To run, select the data you would like to uppercase/lowercase/titlecase/clean NAs and then select 
+* the appropriate action from the COVID Tracking menu.
+* 
+* much credit to https://webapps.stackexchange.com/questions/123706/making-select-columns-uppercase
+*/
+
 function onOpen() {
     var ui = SpreadsheetApp.getUi();
     ui.createMenu('COVID Tracking')
