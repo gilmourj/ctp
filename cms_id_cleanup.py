@@ -23,23 +23,13 @@ def not_nh(record):
     if ((record['State_Facility_Type'] != 'NH') and ~(np.isnan(record['CMS_ID']))):
         record['CMS_ID'] = None
     return record
-
-# process
-# merge with cms - no longer
-# take new CMS id or old if no new
-# run state_to_ctp (checks if state != ctp?)
-# run not_nh
-# clean, remove extraneous columns (new CMS)
     
 def main():
-    # direct download not working?
-    #fl_processed_sheet = 'https://docs.google.com/spreadsheets/d/1UQRhavmfDFG77aQs1IWnudH8Oqx5DPWeUxXofOisXhc/gviz/tq?tqx=out:csv&sheet=Sheet1'
-    fl_processed = '~/downloads/data (1).csv'
-    fl_processed_df = pd.read_csv(fl_processed)
+    fl_processed_sheet = 'https://docs.google.com/spreadsheets/d/1UQRhavmfDFG77aQs1IWnudH8Oqx5DPWeUxXofOisXhc/gviz/tq?tqx=out:csv&sheet=Sheet1'
+    fl_processed_df = pd.read_csv(fl_processed_sheet)
     processed_with_type = fl_processed_df.apply(state_to_ctp, axis = 1)
     processed_with_type = processed_with_type.apply(not_nh, axis = 1)
     processed_with_type.to_csv('fl_facilities.csv')
 
 if __name__ == "__main__":
     main()
-
