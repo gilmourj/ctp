@@ -1,0 +1,36 @@
+name: Run Longcalc
+
+on:
+  schedule:
+    - cron: '40 * * * *
+
+defaults:
+  run:
+     working-directory: longcalc
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Run long calcs
+        run: python longcalc_actions.py
+      - name: Commit
+        if: github.ref == 'refs/heads/master'
+        uses: EndBug/add-and-commit@v5
+        with:
+          message: Updating longcalc data
+          add: data/DE.csv data/HI.csv
+          author_name: GitHub Actions
+          author_email: actions@github.com
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
