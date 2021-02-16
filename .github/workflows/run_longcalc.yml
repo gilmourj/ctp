@@ -2,7 +2,7 @@ name: Run Longcalc
 
 on:
   schedule:
-    - cron: '47 * * * *
+    - cron: '55 * * * *
 
 defaults:
   run:
@@ -11,18 +11,23 @@ defaults:
 jobs:
   run:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
       - name: Use Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: '3.9'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Run long calcs
+      - name: Run longcalcs
         run: | 
           python longcalc_actions.py
       - name: Commit
