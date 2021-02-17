@@ -1,0 +1,34 @@
+name: Manual Run Longcalc
+
+on: workflow_dispatch
+
+defaults:
+  run:
+     working-directory: longcalc
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Run longcalcs
+        run: python longcalc_actions.py
+      - name: Commit
+        if: github.ref == 'refs/heads/master'
+        uses: EndBug/add-and-commit@v5
+        with:
+          cwd: data
+          message: Updating longcalc data
+          add: DE.csv HI.csv
+          author_name: GitHub Actions
+          author_email: actions@github.com
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
