@@ -2,7 +2,7 @@ name: Run Longcalc
 
 on:
   schedule:
-    - cron: '55 * * * *
+    - cron: '57 * * * *'
 
 defaults:
   run:
@@ -22,8 +22,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run longcalcs
-        run: | 
-          python longcalc_actions.py
+        run: python longcalc_actions.py
       - name: Commit
         if: github.ref == 'refs/heads/master'
         uses: EndBug/add-and-commit@v5
